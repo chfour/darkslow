@@ -20,7 +20,7 @@ console.debug("loaded", window.location.hash);
     addToLog(`user id: ${streamData._id}`);
 
     const events = new WebSocket(`wss://events.lightspeed.tv/?channel=${streamData._id}`);
-    events.onmessage = e => {
+    events.addEventListener("message", e => {
         const message = JSON.parse(e.data);
         console.debug(message);
         switch (message.type) {
@@ -42,7 +42,7 @@ console.debug("loaded", window.location.hash);
             default:
                 addToLog("// unknown: " + JSON.dumps(message));
         }
-    }
-    events.onopen = e => {addToLog("connected to events!")};
+    });
+    events.addEventListener("open", e => addToLog("connected to events!"));
 
 })();
