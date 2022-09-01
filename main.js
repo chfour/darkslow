@@ -4,6 +4,19 @@ function addToLog(text) {
     ul.textContent = text;
     logContainer.appendChild(ul);
 }
+function addMessage(msg) {
+    const ul = document.createElement("ul");
+
+    const username = document.createElement("span");
+    username.textContent = msg.author.username;
+    ul.appendChild(username);
+
+    const content = document.createElement("span");
+    content.textContent = msg.content;
+    ul.appendChild(content);
+
+    logContainer.appendChild(ul);
+}
 window.addEventListener("hashchange", _ => window.location.reload());
 
 console.debug("loaded", window.location.hash);
@@ -25,7 +38,7 @@ console.debug("loaded", window.location.hash);
         console.debug(message);
         switch (message.type) {
             case "ChatMessage":
-                addToLog(`<${message.message.author.username}> ${message.message.content}`);
+                addMessage(message.message);
                 break;
             case "StreamStart":
                 addToLog("stream start");
