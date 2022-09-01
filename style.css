@@ -7,7 +7,13 @@ ul {
     padding: 0;
     margin: 0;
 }
-li > :first-child {
+li > .profile {
+    width: 1em;
+    height: 1em;
+    vertical-align: baseline;
+    margin-right: 0.2em;
+}
+li > .username {
     display: inline-block;
     width: 5em;
 }

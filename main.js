@@ -3,11 +3,21 @@ const addToLog = text => addMessage({author: {username: "*"}, content: text});
 function addMessage(msg) {
     const li = document.createElement("li");
 
+    const profile = document.createElement("img");
+    profile.classList.add("profile");
+    if (msg.author.avatar)
+        profile.setAttribute("src", `https://media.lightspeed.tv/avatars/${msg.author.avatar}?max_side=32`);
+    else
+        profile.style.visibility = "hidden";
+    li.appendChild(profile);
+
     const username = document.createElement("span");
+    username.classList.add("username");
     username.textContent = msg.author.username;
     li.appendChild(username);
 
     const content = document.createElement("span");
+    content.classList.add("content");
     content.textContent = msg.content;
     li.appendChild(content);
 
