@@ -1,21 +1,21 @@
 const logContainer = document.getElementById("main");
 function addToLog(text) {
-    const ul = document.createElement("ul");
-    ul.textContent = text;
-    logContainer.appendChild(ul);
+    const li = document.createElement("li");
+    li.textContent = text;
+    logContainer.appendChild(li);
 }
 function addMessage(msg) {
-    const ul = document.createElement("ul");
+    const li = document.createElement("li");
 
     const username = document.createElement("span");
     username.textContent = msg.author.username;
-    ul.appendChild(username);
+    li.appendChild(username);
 
     const content = document.createElement("span");
     content.textContent = msg.content;
-    ul.appendChild(content);
+    li.appendChild(content);
 
-    logContainer.appendChild(ul);
+    logContainer.appendChild(li);
 }
 window.addEventListener("hashchange", _ => window.location.reload());
 
