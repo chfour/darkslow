@@ -35,7 +35,18 @@ console.debug("loaded", window.location.hash);
 const argv = [window.location.origin, ...decodeURIComponent(window.location.hash.slice(1)).split(" ")];
 console.debug("args", argv);
 
-if (argv.includes("-Sirc")) document.body.classList.add("irc");
+argv.forEach(arg => {
+    switch (arg) {
+        case "-Sirc":
+            document.body.classList.add("irc");
+            break;
+        default:
+            if (arg.startsWith("-Cfg=")) document.body.style.color = arg.slice(5);
+            else if (arg.startsWith("-Tfont=")) document.body.style.fontFamily = arg.slice(7).replace(/\+/g, " ");
+            else if (arg.startsWith("-Tsize=")) document.body.style.fontSize = arg.slice(7);
+            else if (arg.startsWith("-Tfweight=")) document.body.style.fontWeight = arg.slice(10);
+    }
+});
 
 (async ()=>{
     const infoRequest = await fetch(`https://api.lightspeed.tv/streams/${argv[1]}`);
