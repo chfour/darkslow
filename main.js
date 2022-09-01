@@ -32,8 +32,13 @@ window.addEventListener("hashchange", _ => window.location.reload());
 
 console.debug("loaded", window.location.hash);
 
+const argv = [window.location.origin, ...decodeURIComponent(window.location.hash.slice(1)).split(" ")];
+console.debug("args", argv);
+
+if (argv.includes("-Sirc")) document.body.classList.add("irc");
+
 (async ()=>{
-    const infoRequest = await fetch(`https://api.lightspeed.tv/streams/${window.location.hash.slice(1)}`);
+    const infoRequest = await fetch(`https://api.lightspeed.tv/streams/${argv[1]}`);
     console.debug("inforequest", infoRequest);
     if (!infoRequest.ok) {
         addToLog(`error fetching info: ${infoRequest.status} ${infoRequest.statusText}, body: ${await infoRequest.text()}`);

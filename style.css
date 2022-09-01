@@ -21,5 +21,5 @@ li .user {
     width: max-content;
     padding-right: 0.5em;
 }
-li .user::before { content: "<"; }
-li .user::after  { content: ">"; }
+body.irc li .user::before { content: "<"; }
+body.irc li .user::after  { content: ">"; }
