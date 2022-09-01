@@ -12,6 +12,7 @@ function addMessage(msg) {
     li.appendChild(content);
 
     logContainer.appendChild(li);
+    return li;
 }
 window.addEventListener("hashchange", _ => window.location.reload());
 
@@ -27,6 +28,16 @@ console.debug("loaded", window.location.hash);
     const streamData = await infoRequest.json();
     console.debug("streamdata", streamData);
     addToLog(`user id: ${streamData._id}`);
+
+    addToLog("fetching messages...");
+    const messagesRequest = await fetch(`https://api.lightspeed.tv/chat/${streamData._id}/messages`);
+    if (!infoRequest.ok) {
+        addToLog(`error fetching messages: ${messagesRequest.status} ${messagesRequest.statusText}, body: ${await messagesRequest.text()}`);
+        return;
+    }
+    const messages = await messagesRequest.json();
+    console.debug(messages);
+    messages.reverse().forEach(addMessage);
 
     const events = new WebSocket(`wss://events.lightspeed.tv/?channel=${streamData._id}`);
     events.addEventListener("message", e => {
@@ -52,6 +63,9 @@ console.debug("loaded", window.location.hash);
                 addToLog("// unknown: " + JSON.dumps(message));
         }
     });
-    events.addEventListener("open", e => addToLog("connected to events!"));
+    events.addEventListener("open", e => {
+        const logEntry = addToLog("connected to events!");
+        setTimeout(() => logContainer.removeChild(logEntry), 1000);
+    });
 
 })();
