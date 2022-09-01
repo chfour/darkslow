@@ -1,9 +1,5 @@
 const logContainer = document.getElementById("main");
-function addToLog(text) {
-    const li = document.createElement("li");
-    li.textContent = text;
-    logContainer.appendChild(li);
-}
+const addToLog = text => addMessage({author: {username: "*"}, content: text});
 function addMessage(msg) {
     const li = document.createElement("li");
 
