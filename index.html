@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>darkslow configurator</title>
+    <style>
+      body {
+          background-color: #181818;
+          color: white;
+          font-family: "Fira Sans", Arial, Helvetica, sans-serif;
+          font-size: 14pt;
+          width: 100%;
+          height: 100%;
+          margin: 0;
+      }
+      a { color: #896ac1; }
+      #main {
+          max-width: 30em;
+          width: 90%;
+          margin-left: 1em;
+      }
+      input[type='number'], input[type='text'] {
+          font-size: 100%;
+          color: white;
+          background-color: transparent;
+          border: none;
+          border-bottom: 2px solid #8a8a8a;
+          width: 8em;
+      }
+      input[type='number']:focus, input[type='text']:focus {
+          outline: none;
+          border-color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main">
+      <h1>darkslow&reg; configurator&trade;</h1>
+      <div style="display: grid; grid-template-columns: max-content auto; gap: 0.5em;">
+        <label for="result">your URL:</label>
+        <input type="text" id="result" name="result" style="width: 100%;" readonly>
+      </div>
+      <fieldset>
+        <legend>general</legend>
+        <label for="username">username: </label> <input type="text" id="username" name="username">
+      </fieldset>
+    </div>
+    <script>
+      const result = document.querySelector("#result");
+      const update = () => {
+          const username = document.querySelector("#username").value;
+          if (!username) return;
+          result.value = (window.origin || null) + "/chat.html#" + encodeURIComponent(username);
+      }
+      document.querySelector("#main").querySelectorAll("input")
+          .forEach(el => ["keyup", "change"].forEach(ev => el.addEventListener(ev, update)));
+      update();
+    </script>
+  </body>
+</html>
