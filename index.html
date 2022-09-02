@@ -40,17 +40,43 @@
         <label for="result">your URL:</label>
         <input type="text" id="result" name="result" style="width: 100%;" readonly>
       </div>
+
       <fieldset>
         <legend>general</legend>
-        <label for="username">username: </label> <input type="text" id="username" name="username">
+        <div>
+          <label for="username">username: </label>
+          <input type="text" id="username" name="username" spellcheck="false" placeholder="like 'chfour'">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>style</legend>
+        <div>
+          <label for="ircstyle">IRC-style (<code>&lt;username&gt; message</code>): </label>
+          <input type="checkbox" id="ircstyle" name="ircstyle">
+        </div>
+        <div>
+          <label for="fontsize">font size: </label>
+          <input type="text" id="fontsize" name="fontsize" value="12pt" spellcheck="false" placeholder="CSS length/percentage">
+        </div>
       </fieldset>
     </div>
     <script>
       const result = document.querySelector("#result");
       const update = () => {
-          const username = document.querySelector("#username").value;
+          let argv = [];
+
+          const username = document.querySelector("#username").value.trim();
           if (!username) return;
-          result.value = (window.origin || null) + "/chat.html#" + encodeURIComponent(username);
+          argv.push(username);
+
+          if (document.querySelector("#ircstyle").checked) argv.push("-Sirc");
+
+          const fontsize = document.querySelector("#fontsize").value.trim();
+          if (fontsize && fontsize !== "12pt") argv.push(`-Fsize=${fontsize}`);
+
+          console.debug(argv);
+          result.value = (window.origin || null) + "/chat.html#" + encodeURIComponent(argv.join(" "));
       }
       document.querySelector("#main").querySelectorAll("input")
           .forEach(el => ["keyup", "change"].forEach(ev => el.addEventListener(ev, update)));
