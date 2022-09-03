@@ -157,7 +157,7 @@
           console.debug(argv);
 
           if (!username) return;
-          result.value = (window.origin || null) + "/chat.html#" + encodeURIComponent(argv.join(" "));
+          result.value = (window.location.href.slice(0, window.location.href.lastIndexOf("/"))) + "/chat.html#" + encodeURIComponent(argv.join(" "));
       }
       document.querySelector("#main").querySelectorAll("input")
           .forEach(el => ["keyup", "change"].forEach(ev => el.addEventListener(ev, update)));
