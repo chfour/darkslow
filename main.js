@@ -26,6 +26,7 @@ function addMessage(msg) {
     li.appendChild(content);
 
     logContainer.appendChild(li);
+    window.scrollTo(0, document.body.scrollHeight);
     return li;
 }
 window.addEventListener("hashchange", _ => window.location.reload());
