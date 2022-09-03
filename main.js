@@ -6,7 +6,7 @@ function addMessage(msg) {
     const user = document.createElement("span");
     user.classList.add("user");
 
-    if (msg.author.avatar) {
+    if (msg.author.avatar && !argv.includes("-Sno-profiles")) {
         const profile = document.createElement("img");
         profile.classList.add("profile");
         profile.setAttribute("src", `https://media.lightspeed.tv/avatars/${msg.author.avatar}?max_side=32`);

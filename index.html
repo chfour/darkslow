@@ -56,6 +56,10 @@
           <input type="checkbox" id="ircstyle" name="ircstyle">
         </div>
         <div>
+          <label for="profiles">show profile pictures: </label>
+          <input type="checkbox" id="profiles" name="profiles" checked>
+        </div>
+        <div>
           <datalist id="fontfaces">
             <option value="sans-serif">
             <option value="serif">
@@ -91,6 +95,8 @@
           argv.push(username);
 
           if (document.querySelector("#ircstyle").checked) argv.push("-Sirc");
+
+          if (!document.querySelector("#profiles").checked) argv.push("-Sno-profiles");
 
           const fontsize = document.querySelector("#fontsize").value.trim();
           if (fontsize && fontsize !== "12pt") argv.push(`-Fsize=${fontsize}`);
