@@ -31,6 +31,9 @@
           outline: none;
           border-color: white;
       }
+      input[type='color'] {
+          vertical-align: middle;
+      }
     </style>
   </head>
   <body>
@@ -51,6 +54,12 @@
 
       <fieldset>
         <legend>style</legend>
+        <div>
+          <label for="fgcolor">text color: </label>
+          <input type="color" id="fgcolor" name="fgcolor" value="#000000">
+          <label for="fgalpha">alpha: </label>
+          <input type="number" id="fgalpha" name="fgalpha" value="0" min="0" max="255" style="font-family: monospace; width: 3em;">
+        </div>
         <div>
           <label for="ircstyle">IRC-style (<code>&lt;username&gt; message</code>): </label>
           <input type="checkbox" id="ircstyle" name="ircstyle">
@@ -87,12 +96,17 @@
     </div>
     <script>
       const result = document.querySelector("#result");
+      const toHexByte = n => (n>15?"":"0")+n.toString(16);
       const update = () => {
           let argv = [];
 
           const username = document.querySelector("#username").value.trim();
           if (!username) return;
           argv.push(username);
+
+          const fgcolor = document.querySelector("#fgcolor").value;
+          const fgalpha = parseInt(document.querySelector("#fgalpha").value);
+          if (fgcolor !== "#000000" || fgalpha !== 255) argv.push(`-Cfg=${fgcolor}${fgalpha===255 ? "" : toHexByte(fgalpha)}`);
 
           if (document.querySelector("#ircstyle").checked) argv.push("-Sirc");
 
