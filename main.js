@@ -1,4 +1,4 @@
-const logContainer = document.getElementById("main");
+const logContainer = document.querySelector("#chat");
 const addToLog = text => addMessage({author: {username: "*"}, content: text});
 function addMessage(msg) {
     const li = document.createElement("li");

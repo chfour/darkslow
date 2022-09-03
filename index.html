@@ -34,7 +34,20 @@
       input[type='color'] {
           vertical-align: middle;
       }
+      #preview {
+          width: 100%;
+          height: 6em;
+          border: 2px solid white;
+          padding: 0.5em;
+          box-sizing: border-box;
+          margin-bottom: 0.5em;
+          font-family: sans-serif;
+          background-color: white;
+          font-size: 12pt;
+      }
+      .noprofiles .profile { display: none; }
     </style>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <div id="main">
@@ -54,11 +67,19 @@
 
       <fieldset>
         <legend>style</legend>
+        <div id="preview">
+          <ul id="chat">
+            <li><span class="user"><span class="username">*</span></span><span>info message</span></li>
+            <li><span class="user"><img class="profile" src="data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAACQBQCdASogACAAP3GiyFw0qygkMBgIApAuCWYAqPQK9PgWXYiOzz5WCZrtkzwcCtZmVm5cAADCtkOrNkcRP+N04mNJUq9NHxl8PZAVY0fe2DerNdjtTLKuzoNmvqvwyx2EoJdIzcVuaw/F0HsC7yWubDn0uvUKdljlAAAA"><span class="username">user</span></span><span>hewwo</span></li>
+            <li><span class="user"><img class="profile" src="data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAACQBQCdASogACAAP3GiyFw0qygkMBgIApAuCWYAqPQK9PgWXYiOzz5WCZrtkzwcCtZmVm5cAADCtkOrNkcRP+N04mNJUq9NHxl8PZAVY0fe2DerNdjtTLKuzoNmvqvwyx2EoJdIzcVuaw/F0HsC7yWubDn0uvUKdljlAAAA"><span class="username">user</span></span><span>hii here's some loooooooong text texttt some filler hiiii</span></li>
+          </ul>
+        </div>
+
         <div>
           <label for="fgcolor">text color: </label>
           <input type="color" id="fgcolor" name="fgcolor" value="#000000">
           <label for="fgalpha">alpha: </label>
-          <input type="number" id="fgalpha" name="fgalpha" value="0" min="0" max="255" style="font-family: monospace; width: 3em;">
+          <input type="number" id="fgalpha" name="fgalpha" value="255" min="0" max="255" style="font-family: monospace; width: 3em;">
         </div>
         <div>
           <label for="ircstyle">IRC-style (<code>&lt;username&gt; message</code>): </label>
@@ -96,32 +117,46 @@
     </div>
     <script>
       const result = document.querySelector("#result");
+      const preview = document.querySelector("#preview");
+
       const toHexByte = n => (n>15?"":"0")+n.toString(16);
       const update = () => {
           let argv = [];
 
           const username = document.querySelector("#username").value.trim();
-          if (!username) return;
           argv.push(username);
 
           const fgcolor = document.querySelector("#fgcolor").value;
           const fgalpha = parseInt(document.querySelector("#fgalpha").value);
-          if (fgcolor !== "#000000" || fgalpha !== 255) argv.push(`-Cfg=${fgcolor}${fgalpha===255 ? "" : toHexByte(fgalpha)}`);
+          const fgcolorhex = `${fgcolor}${fgalpha===255 ? "" : toHexByte(fgalpha)}`;
+          if (fgcolor !== "#000000" || fgalpha !== 255) argv.push(`-Cfg=${fgcolorhex}`);
+          preview.style.color = fgcolorhex;
 
-          if (document.querySelector("#ircstyle").checked) argv.push("-Sirc");
+          if (document.querySelector("#ircstyle").checked) {
+              argv.push("-Sirc");
+              preview.classList.add("irc");
+          } else preview.classList.remove("irc");
 
-          if (!document.querySelector("#profiles").checked) argv.push("-Sno-profiles");
+          if (!document.querySelector("#profiles").checked) {
+            argv.push("-Sno-profiles");
+            preview.classList.add("noprofiles");
+          } else preview.classList.remove("noprofiles");
 
           const fontsize = document.querySelector("#fontsize").value.trim();
           if (fontsize && fontsize !== "12pt") argv.push(`-Fsize=${fontsize}`);
+          preview.style.fontSize = fontsize;
 
           const fontface = document.querySelector("#fontface").value.trim();
           if (fontface && fontface !== "sans-serif") argv.push(`-Ffont=${fontface.replace(/ /g, "+")}`);
+          preview.style.fontFamily = fontface;
 
           const fontweight = document.querySelector("#fontweight").value.trim();
           if (fontweight && fontweight !== "normal") argv.push(`-Fweight=${fontweight}`);
+          preview.style.fontWeight = fontweight;
 
           console.debug(argv);
+
+          if (!username) return;
           result.value = (window.origin || null) + "/chat.html#" + encodeURIComponent(argv.join(" "));
       }
       document.querySelector("#main").querySelectorAll("input")
