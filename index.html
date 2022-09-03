@@ -45,7 +45,7 @@
         <legend>general</legend>
         <div>
           <label for="username">username: </label>
-          <input type="text" id="username" name="username" spellcheck="false" placeholder="like 'chfour'">
+          <input type="text" id="username" name="username" autocomplete="username" spellcheck="false" placeholder="like 'chfour'">
         </div>
       </fieldset>
 
@@ -65,11 +65,19 @@
             <option value="fantasy">
           </datalist>
           <label for="fontface">font: </label>
-          <input type="text" id="fontface" name="fontface" value="sans-serif" spellcheck="false" placeholder="CSS font family" list="fontfaces">
+          <input type="text" id="fontface" name="fontface" value="sans-serif" autocomplete="off" spellcheck="false" placeholder="CSS font family" list="fontfaces">
         </div>
         <div>
           <label for="fontsize">font size: </label>
-          <input type="text" id="fontsize" name="fontsize" value="12pt" spellcheck="false" placeholder="CSS length/percentage">
+          <input type="text" id="fontsize" name="fontsize" value="12pt" autocomplete="off" spellcheck="false" placeholder="CSS length/percentage">
+        </div>
+        <div>
+          <datalist id="fontweights">
+            <option value="normal">
+            <option value="bold">
+          </datalist>
+          <label for="fontweight">font weight: </label>
+          <input type="text" id="fontweight" name="fontweight" value="normal" autocomplete="off" spellcheck="false" placeholder="CSS font-weight value" list="fontweights">
         </div>
       </fieldset>
     </div>
@@ -89,6 +97,9 @@
 
           const fontface = document.querySelector("#fontface").value.trim();
           if (fontface && fontface !== "sans-serif") argv.push(`-Ffont=${fontface.replace(/ /g, "+")}`);
+
+          const fontweight = document.querySelector("#fontweight").value.trim();
+          if (fontweight && fontweight !== "normal") argv.push(`-Fweight=${fontweight}`);
 
           console.debug(argv);
           result.value = (window.origin || null) + "/chat.html#" + encodeURIComponent(argv.join(" "));
