@@ -17,5 +17,6 @@ ul#chat {
     width: max-content;
     padding-right: 0.5em;
 }
+#chat li .content { word-break: break-word; }
 .irc #chat li .user::before { content: "<"; }
 .irc #chat li .user::after  { content: ">"; }
