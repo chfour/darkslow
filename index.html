@@ -56,6 +56,18 @@
           <input type="checkbox" id="ircstyle" name="ircstyle">
         </div>
         <div>
+          <datalist id="fontfaces">
+            <option value="sans-serif">
+            <option value="serif">
+            <option value="monospace">
+            <option value="cursive">
+            <option value="system-ui">
+            <option value="fantasy">
+          </datalist>
+          <label for="fontface">font: </label>
+          <input type="text" id="fontface" name="fontface" value="sans-serif" spellcheck="false" placeholder="CSS font family" list="fontfaces">
+        </div>
+        <div>
           <label for="fontsize">font size: </label>
           <input type="text" id="fontsize" name="fontsize" value="12pt" spellcheck="false" placeholder="CSS length/percentage">
         </div>
@@ -74,6 +86,9 @@
 
           const fontsize = document.querySelector("#fontsize").value.trim();
           if (fontsize && fontsize !== "12pt") argv.push(`-Fsize=${fontsize}`);
+
+          const fontface = document.querySelector("#fontface").value.trim();
+          if (fontface && fontface !== "sans-serif") argv.push(`-Ffont=${fontface.replace(/ /g, "+")}`);
 
           console.debug(argv);
           result.value = (window.origin || null) + "/chat.html#" + encodeURIComponent(argv.join(" "));
