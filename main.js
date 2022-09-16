@@ -6,7 +6,7 @@ function addMessage(msg) {
     const user = document.createElement("span");
     user.classList.add("user");
 
-    if (msg.author.avatar && !argv.includes("-Sno-profiles")) {
+    if (msg.author.avatar && !argv.has("Pnone")) {
         const profile = document.createElement("img");
         profile.classList.add("profile");
         profile.setAttribute("src", `https://media.lightspeed.tv/avatars/${msg.author.avatar}?max_side=32`);
@@ -33,25 +33,17 @@ window.addEventListener("hashchange", _ => window.location.reload());
 
 console.debug("loaded", window.location.hash);
 
-const argv = [window.location.origin, ...decodeURIComponent(window.location.hash.slice(1)).split(" ")];
+const argv = new URLSearchParams(window.location.hash.slice(1));
 console.debug("args", argv);
-
-argv.forEach(arg => {
-    switch (arg) {
-        case "-Sirc":
-            document.body.classList.add("irc");
-            break;
-        default:
-            if (arg.startsWith("-Cfg=")) document.body.style.color = arg.slice(5);
-            else if (arg.startsWith("-Tfont=")) document.body.style.fontFamily = arg.slice(7).replace(/\+/g, " ");
-            else if (arg.startsWith("-Tsize=")) document.body.style.fontSize = arg.slice(7);
-            else if (arg.startsWith("-Tfweight=")) document.body.style.fontWeight = arg.slice(10);
-            else if (arg.startsWith("-Pradius=")) document.body.style.setProperty("--profile-radius", arg.slice(9));
-    }
-});
+if (argv.has("Sirc")) document.body.classList.add("irc");
+if (argv.has("Cfg")) document.body.style.color = argv.get("Cfg");
+if (argv.has("Ffont")) document.body.style.fontFamily = argv.get("Ffont");
+if (argv.has("Fsize")) document.body.style.fontSize = argv.get("Fsize");
+if (argv.has("Fweight")) document.body.style.fontWeight = argv.get("Fweight");
+if (argv.has("Pradius")) document.body.style.setProperty("--profile-radius", argv.get("Pradius"));
 
 (async ()=>{
-    const infoRequest = await fetch(`https://api.lightspeed.tv/streams/${argv[1]}`);
+    const infoRequest = await fetch(`https://api.lightspeed.tv/streams/${argv.get("u")}`);
     console.debug("inforequest", infoRequest);
     if (!infoRequest.ok) {
         addToLog(`error fetching info: ${infoRequest.status} ${infoRequest.statusText}, body: ${await infoRequest.text()}`);
