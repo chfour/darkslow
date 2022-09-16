@@ -9,6 +9,7 @@ ul#chat {
     height: 1em;
     margin-right: 0.2em;
     vertical-align: baseline;
+    border-radius: var(--profile-radius, 0);
 }
 
 #chat li { display: table-row; }

@@ -46,6 +46,7 @@
           font-size: 12pt;
       }
       .noprofiles .profile { display: none; }
+      fieldset p { margin: 0; }
     </style>
     <link rel="stylesheet" href="style.css">
   </head>
@@ -88,6 +89,15 @@
         <div>
           <label for="profiles">show profile pictures: </label>
           <input type="checkbox" id="profiles" name="profiles" checked>
+        </div>
+        <div>
+          <p>profile picture roundness:</p>
+          <input type="radio" id="profilesquare" name="profileroundness" checked>
+          <label for="profilesquare">square</label>
+          <input type="radio" id="profilecircular" name="profileroundness">
+          <label for="profilecircular">circular</label>
+          <input type="radio" id="profilerounded" name="profileroundness">
+          <label for="profilerounded">rounded square</label>
         </div>
         <div>
           <datalist id="fontfaces">
@@ -138,9 +148,21 @@
           } else preview.classList.remove("irc");
 
           if (!document.querySelector("#profiles").checked) {
-            argv.push("-Sno-profiles");
-            preview.classList.add("noprofiles");
-          } else preview.classList.remove("noprofiles");
+              argv.push("-Pnone");
+              preview.classList.add("noprofiles");
+          } else {
+              preview.classList.remove("noprofiles");
+
+              if (document.querySelector("#profilerounded").checked) {
+                  argv.push("-Pradius=20%");
+                  preview.style.setProperty("--profile-radius", "20%");
+              } else if (document.querySelector("#profilecircular").checked) {
+                  argv.push("-Pradius=50%");
+                  preview.style.setProperty("--profile-radius", "50%");
+              } else {
+                  preview.style.setProperty("--profile-radius", "0%");
+              }
+          }
 
           const fontsize = document.querySelector("#fontsize").value.trim();
           if (fontsize && fontsize !== "12pt") argv.push(`-Fsize=${fontsize}`);

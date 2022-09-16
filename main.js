@@ -46,6 +46,7 @@ argv.forEach(arg => {
             else if (arg.startsWith("-Tfont=")) document.body.style.fontFamily = arg.slice(7).replace(/\+/g, " ");
             else if (arg.startsWith("-Tsize=")) document.body.style.fontSize = arg.slice(7);
             else if (arg.startsWith("-Tfweight=")) document.body.style.fontWeight = arg.slice(10);
+            else if (arg.startsWith("-Pradius=")) document.body.style.setProperty("--profile-radius", arg.slice(9));
     }
 });
 
